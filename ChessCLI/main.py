@@ -1,6 +1,5 @@
-from chessdotcom import get_player_profile, get_player_game_archives, get_player_games_by_month_pgn
-from utilities import *
-
+from utilities import WrongValueError
+from player_profile import Player_Profile
 if __name__ == '__main__':
     while True:
         print(f'Welcome to the Chess.com Analysis CLI!')
@@ -17,5 +16,7 @@ if __name__ == '__main__':
                 break
 
         if choice == 1:
-            player_name = input(f'Please enter in the players profile name: ')
-            print(get_player_games_by_month_pgn(player_name, 2021, 9).json)
+            player = Player_Profile(input(f'Enter the username: '))
+            player.get_moves()
+
+
