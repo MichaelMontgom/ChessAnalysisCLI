@@ -1,4 +1,5 @@
 import chessdotcom.types
+from datetime import date
 from chessdotcom import *
 
 
@@ -10,10 +11,12 @@ class PlayerProfile:
         except ChessDotComError:
             print(f'There was an error retrieving the user by that username')
 
-    def get_moves(self):
+    def get_moves_for_year(self):
         try:
-            moves = get_player_games_by_month_pgn(self.username, 2021, 9)
-            return moves.__dict__
+            moves = []
+            for month in range(1, date.today().month):
+                moves.append(get_player_games_by_month_pgn(self.username, date.today().year, month).__dict__)
+            return moves
         except ChessDotComError:
             print(f'There was an error retrieving {self.username} previous games')
 
@@ -27,7 +30,6 @@ class PlayerProfile:
     def get_game_archive(self):
         try:
             games = get_player_game_archives(self.username)
-
             return games.__dict__
         except ChessDotComError:
             print(f'There was an issue retrieving {self.username} archived games')
