@@ -1,10 +1,6 @@
-from utilities import WrongValueError
-from player_profile import PlayerProfile
-from datetime import date
+from opening_move_preference import opening_move_preference
 if __name__ == '__main__':
-    print()
-    player = PlayerProfile('DarthBraves')
-    print(player.get_moves_for_year())
+    opening_move_preference()
 
 
 

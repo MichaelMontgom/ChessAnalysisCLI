@@ -12,6 +12,7 @@ class PlayerProfile:
             self.profile = get_player_profile(username).json
         except ChessDotComError:
             print(f'There was an error retrieving the user by that username')
+            self.profile = None
 
     def get_moves_for_year(self):
         """Probably don't call this many times to reduce number of calls on the Chess.com API"""
@@ -24,6 +25,7 @@ class PlayerProfile:
                 return self.games_for_year
             except ChessDotComError:
                 print(f'There was an error retrieving {self.username} previous games')
+
         return self.games_for_year
 
     def get_current(self):
