@@ -1,11 +1,8 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	fmt.Println("Hello World")
-	getPlayerProfile("DarthBraves")
+	fmt.Print(getPlayerProfile("DarthBraves"))
 
 }
