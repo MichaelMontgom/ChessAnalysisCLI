@@ -5,12 +5,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func getPlayerProfile(username string) {
 
 	var url string = "https://api.chess.com/pub/player/" + username
-	resp, err := http.Get(url)
+	resp, err := http.Get(strings.TrimSpace(url))
 
 	if err != nil {
 		log.Fatal(err)
@@ -29,8 +30,8 @@ func getPlayerProfile(username string) {
 
 func getPlayerStats(username string) {
 
-	var url string = " https://api.chess.com/pub/player/" + username + "/stats"
-	resp, err := http.Get(url)
+	var url string = "https://api.chess.com/pub/player/" + username + "/stats"
+	resp, err := http.Get(strings.TrimSpace(url))
 
 	if err != nil {
 		log.Fatal(err)
@@ -48,8 +49,8 @@ func getPlayerStats(username string) {
 
 func isPlayerOnline(username string) {
 
-	var url string = " https://api.chess.com/pub/player/" + username + "/is-online"
-	resp, err := http.Get(url)
+	var url string = "https://api.chess.com/pub/player/" + username + "/is-online"
+	resp, err := http.Get(strings.TrimSpace(url))
 
 	if err != nil {
 		log.Fatal(err)
@@ -67,8 +68,9 @@ func isPlayerOnline(username string) {
 }
 
 func getCurrentDailyGames(username string) {
-	var url string = " https://api.chess.com/pub/player/" + username + "/games"
-	resp, err := http.Get(url)
+
+	var url string = "https://api.chess.com/pub/player/" + username + "/games"
+	resp, err := http.Get(strings.TrimSpace(url))
 
 	if err != nil {
 		log.Fatal(err)
@@ -82,4 +84,24 @@ func getCurrentDailyGames(username string) {
 	}
 
 	fmt.Print(string(body))
+}
+
+func getMonthlyArchive(username string, month string, year string) {
+
+	var url string = "https://api.chess.com/pub/player/" + username + "/games/" + year + "/" + month
+	resp, err := http.Get(strings.TrimSpace(url))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Print(string(body))
+
 }
