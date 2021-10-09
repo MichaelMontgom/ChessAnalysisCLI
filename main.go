@@ -1,9 +1,8 @@
 package main
 
+import "fmt"
+
 func main() {
-	// fmt.Println("Hello World")
-	// getPlayerProfile("DarthBraves")
-	// getCurrentDailyGames("DarthBraves")
-	getMonthlyArchive("DarthBraves", "09", "2021")
+	fmt.Print(getPlayerProfile("DarthBraves"))
 
 }

@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 )
 
-func getPlayerProfile(username string) {
+func getPlayerProfile(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -24,11 +23,11 @@ func getPlayerProfile(username string) {
 		log.Fatal(err)
 	}
 
-	fmt.Print(string(body))
+	return string(body)
 
 }
 
-func getPlayerStats(username string) {
+func getPlayerStats(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/stats"
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -44,10 +43,10 @@ func getPlayerStats(username string) {
 		log.Fatal(err)
 	}
 
-	fmt.Print(string(body))
+	return string(body)
 }
 
-func isPlayerOnline(username string) {
+func isPlayerOnline(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/is-online"
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -63,11 +62,11 @@ func isPlayerOnline(username string) {
 		log.Fatal(err)
 	}
 
-	fmt.Print(string(body))
+	return string(body)
 
 }
 
-func getCurrentDailyGames(username string) {
+func getCurrentDailyGames(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/games"
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -83,10 +82,10 @@ func getCurrentDailyGames(username string) {
 		log.Fatal(err)
 	}
 
-	fmt.Print(string(body))
+	return string(body)
 }
 
-func getMonthlyArchive(username string, month string, year string) {
+func getMonthlyArchive(username string, month string, year string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/games/" + year + "/" + month
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -102,6 +101,6 @@ func getMonthlyArchive(username string, month string, year string) {
 		log.Fatal(err)
 	}
 
-	fmt.Print(string(body))
+	return string(body)
 
 }
