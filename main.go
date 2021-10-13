@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -11,11 +11,11 @@ func main() {
 
 	openingMoveCommand := flag.NewFlagSet("opening", flag.ExitOnError)
 
-	openingGames := openingMoveCommand.String("username", "", "user's chess.com name")
+	openingGames := openingMoveCommand.String("games", "", "Pass user's chess.com name to get their past games opening moves")
 
 	// see if enough arguments have been passed
 	if len(os.Args) < 2 {
-		fmt.Println("subcommand required")
+		log.Println("subcommand required")
 		os.Exit(1)
 	}
 
@@ -32,8 +32,9 @@ func main() {
 			openingMoveCommand.PrintDefaults()
 			os.Exit(1)
 		}
+		// logic for -games
 
-		fmt.Print(*openingGames)
+		getOpeningMovePreference(*openingGames)
 
 	}
 
