@@ -1,19 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"regexp"
 	"strconv"
-	"time"
-
 	"strings"
+	"time"
 )
 
-func getPlayerProfile(username string) map[string]interface{} {
+func getPlayerProfile(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -29,21 +27,11 @@ func getPlayerProfile(username string) map[string]interface{} {
 		log.Fatal(err)
 	}
 
-	var profile map[string]interface{}
-
-	err2 := json.Unmarshal([]byte(body), &profile)
-
-	if err2 != nil {
-		log.Fatal(err2)
-	}
-
-	log.Println(profile)
-
-	return profile
+	return string(body)
 
 }
 
-func getPlayerStats(username string) map[string]interface{} {
+func getPlayerStats(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/stats"
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -59,20 +47,10 @@ func getPlayerStats(username string) map[string]interface{} {
 		log.Fatal(err)
 	}
 
-	var games map[string]interface{}
-
-	err2 := json.Unmarshal([]byte(body), &games)
-
-	if err2 != nil {
-		log.Fatal(err2)
-	}
-
-	log.Println(games)
-
-	return games
+	return string(body)
 }
 
-func isPlayerOnline(username string) map[string]interface{} {
+func isPlayerOnline(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/is-online"
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -88,21 +66,11 @@ func isPlayerOnline(username string) map[string]interface{} {
 		log.Fatal(err)
 	}
 
-	var games map[string]interface{}
-
-	err2 := json.Unmarshal([]byte(body), &games)
-
-	if err2 != nil {
-		log.Fatal(err2)
-	}
-
-	log.Println(games)
-
-	return games
+	return string(body)
 
 }
 
-func getCurrentDailyGames(username string) map[string]interface{} {
+func getCurrentDailyGames(username string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/games"
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -118,17 +86,7 @@ func getCurrentDailyGames(username string) map[string]interface{} {
 		log.Fatal(err)
 	}
 
-	var games map[string]interface{}
-
-	err2 := json.Unmarshal([]byte(body), &games)
-
-	if err2 != nil {
-		log.Fatal(err2)
-	}
-
-	log.Println(games)
-
-	return games
+	return string(body)
 }
 
 func getMonthlyArchive(username string, month string, year string) string {
@@ -157,8 +115,9 @@ func getOpeningMovePreference(username string) string {
 	games := getMonthlyArchive(username, strconv.Itoa(int(t.Month())), strconv.Itoa(t.Year()))
 
 	// re := regexp.MustCompile(`1\. ...`)
-	// whiteRe := regexp.MustCompile(`1\. ...`)
-	// blackRe := regexp.MustCompile(`1\.\.\. ...`)
+
+	whiteRe := regexp.MustCompile("1\\. ...")
+	blackRe := regexp.MustCompile("1\\.\\.\\. ...")
 
 	white := "White .." + username
 	black := "Black .." + username
@@ -178,15 +137,19 @@ func getOpeningMovePreference(username string) string {
 			log.Fatal(err2)
 		}
 
+		fmt.Println(isBlack, isWhite)
+
 		if isWhite {
 			fmt.Println("User is playing white")
-			fmt.Println(element)
+			fmt.Printf("%q\n", whiteRe.Find([]byte(element)))
+			// fmt.Println(element)
 			continue
 		}
 
 		if isBlack {
 			fmt.Println("User is playing black")
-			fmt.Println(element)
+			fmt.Printf("%q\n", blackRe.Find([]byte(element)))
+			// fmt.Println(element)
 			continue
 		}
 
