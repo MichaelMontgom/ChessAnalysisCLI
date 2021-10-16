@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 )
@@ -34,7 +35,7 @@ func main() {
 		}
 		// logic for -games
 
-		getOpeningMovePreference(*openingGames)
+		fmt.Print(getOpeningMovePreference(*openingGames))
 
 	}
 

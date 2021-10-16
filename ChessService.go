@@ -109,7 +109,7 @@ func getMonthlyArchive(username string, month string, year string) string {
 
 }
 
-func getOpeningMovePreference(username string) string {
+func getOpeningMovePreference(username string) []string {
 
 	t := time.Now()
 	games := getMonthlyArchive(username, strconv.Itoa(int(t.Month())), strconv.Itoa(t.Year()))
@@ -123,7 +123,7 @@ func getOpeningMovePreference(username string) string {
 	black := "Black .." + username
 
 	s := strings.Split(games, "url")
-	// var moves []string
+	var moves []string
 
 	for _, element := range s {
 
@@ -137,23 +137,19 @@ func getOpeningMovePreference(username string) string {
 			log.Fatal(err2)
 		}
 
-		fmt.Println(isBlack, isWhite)
-
 		if isWhite {
-			fmt.Println("User is playing white")
-			fmt.Printf("%q\n", whiteRe.Find([]byte(element)))
-			// fmt.Println(element)
+			move := fmt.Sprintf("%q\n", whiteRe.Find([]byte(element)))
+			moves = append(moves, move)
 			continue
 		}
 
 		if isBlack {
-			fmt.Println("User is playing black")
-			fmt.Printf("%q\n", blackRe.Find([]byte(element)))
-			// fmt.Println(element)
+			move := fmt.Sprintf("%q\n", blackRe.Find([]byte(element)))
+			moves = append(moves, move)
 			continue
 		}
 
 	}
 
-	return ""
+	return moves
 }
