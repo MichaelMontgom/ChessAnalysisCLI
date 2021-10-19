@@ -109,12 +109,10 @@ func getMonthlyArchive(username string, month string, year string) string {
 
 }
 
-func getOpeningMovePreference(username string) []string {
+func getOpeningMovePreference(username string) ([]string, []string) {
 
 	t := time.Now()
 	games := getMonthlyArchive(username, strconv.Itoa(int(t.Month())), strconv.Itoa(t.Year()))
-
-	// re := regexp.MustCompile(`1\. ...`)
 
 	whiteRe := regexp.MustCompile("1\\. ...")
 	blackRe := regexp.MustCompile("1\\.\\.\\. ...")
@@ -123,7 +121,8 @@ func getOpeningMovePreference(username string) []string {
 	black := "Black .." + username
 
 	s := strings.Split(games, "url")
-	var moves []string
+	var whiteMoves []string
+	var blackMoves []string
 
 	for _, element := range s {
 
@@ -138,18 +137,18 @@ func getOpeningMovePreference(username string) []string {
 		}
 
 		if isWhite {
-			move := fmt.Sprintf("%q\n", whiteRe.Find([]byte(element)))
-			moves = append(moves, move)
+			move := fmt.Sprintf("%s\n", whiteRe.Find([]byte(element)))
+			whiteMoves = append(whiteMoves, move)
 			continue
 		}
 
 		if isBlack {
-			move := fmt.Sprintf("%q\n", blackRe.Find([]byte(element)))
-			moves = append(moves, move)
+			move := fmt.Sprintf("%s %s\n", whiteRe.Find([]byte(element)), blackRe.Find([]byte(element)))
+			blackMoves = append(blackMoves, move)
 			continue
 		}
 
 	}
 
-	return moves
+	return whiteMoves, blackMoves
 }
