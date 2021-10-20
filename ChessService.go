@@ -121,8 +121,7 @@ func getOpeningMovePreference(username string) ([]string, []string) {
 	black := "Black .." + username
 
 	s := strings.Split(games, "url")
-	var whiteMoves []string
-	var blackMoves []string
+	var whiteMoves, blackMoves []string
 
 	for _, element := range s {
 
@@ -151,4 +150,30 @@ func getOpeningMovePreference(username string) ([]string, []string) {
 	}
 
 	return whiteMoves, blackMoves
+}
+
+func getMonths() ([]int, []int) {
+
+	month := int(time.Now().Month())
+	year := time.Now().Year()
+	var months, years []int
+
+	// month := int(t.Month())
+
+	for i := 0; i < 11; i++ {
+
+		months = append(months, month)
+		years = append(years, year)
+
+		if month == 1 {
+			month = 12
+			year = year - 1
+			continue
+		}
+
+		month = month - 1
+
+	}
+
+	return months, years
 }

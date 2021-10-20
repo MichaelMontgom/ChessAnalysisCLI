@@ -21,7 +21,8 @@ func main() {
 
 	switch os.Args[1] {
 	case "-opening":
-		fmt.Print(getOpeningMovePreference(openingMoveCommand))
+		// fmt.Print(getOpeningMovePreference(openingMoveCommand))
+		fmt.Print(getMonths())
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)
