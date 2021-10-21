@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -89,7 +90,7 @@ func getCurrentDailyGames(username string) string {
 	return string(body)
 }
 
-func getMonthlyArchive(username string, month string, year string) string {
+func getMonthlyArchive(username string, year string, month string) string {
 
 	var url string = "https://api.chess.com/pub/player/" + username + "/games/" + year + "/" + month
 	resp, err := http.Get(strings.TrimSpace(url))
@@ -109,10 +110,17 @@ func getMonthlyArchive(username string, month string, year string) string {
 
 }
 
-func getOpeningMovePreference(username string) ([]string, []string) {
+func getOpeningMovePreference(username string, year int, month int) [][]string {
 
-	t := time.Now()
-	games := getMonthlyArchive(username, strconv.Itoa(int(t.Month())), strconv.Itoa(t.Year()))
+	var games string
+
+	if month < 10 {
+		games = getMonthlyArchive(username, strconv.Itoa(year), "0"+strconv.Itoa(month))
+	} else {
+		games = getMonthlyArchive(username, strconv.Itoa(year), strconv.Itoa(month))
+	}
+
+	// fmt.Println(games)
 
 	whiteRe := regexp.MustCompile("1\\. ...")
 	blackRe := regexp.MustCompile("1\\.\\.\\. ...")
@@ -122,6 +130,7 @@ func getOpeningMovePreference(username string) ([]string, []string) {
 
 	s := strings.Split(games, "url")
 	var whiteMoves, blackMoves []string
+	var moves [][]string
 
 	for _, element := range s {
 
@@ -148,19 +157,20 @@ func getOpeningMovePreference(username string) ([]string, []string) {
 		}
 
 	}
+	moves = append(moves, whiteMoves)
+	moves = append(moves, blackMoves)
 
-	return whiteMoves, blackMoves
+	return moves
 }
 
 func getMonths() ([]int, []int) {
 
 	month := int(time.Now().Month())
 	year := time.Now().Year()
+
 	var months, years []int
 
-	// month := int(t.Month())
-
-	for i := 0; i < 11; i++ {
+	for i := 0; i < 12; i++ {
 
 		months = append(months, month)
 		years = append(years, year)
@@ -176,4 +186,142 @@ func getMonths() ([]int, []int) {
 	}
 
 	return months, years
+}
+
+func processOpeningMove(username string) {
+
+	months, years := getMonths()
+
+	var wg sync.WaitGroup
+
+	wg.Add(12)
+
+	out1 := make(chan [][]string)
+	out2 := make(chan [][]string)
+	out3 := make(chan [][]string)
+	out4 := make(chan [][]string)
+	out5 := make(chan [][]string)
+	out6 := make(chan [][]string)
+	out7 := make(chan [][]string)
+	out8 := make(chan [][]string)
+	out9 := make(chan [][]string)
+	out10 := make(chan [][]string)
+	out11 := make(chan [][]string)
+	out12 := make(chan [][]string)
+
+	go func() {
+		defer wg.Done()
+
+		out1 <- getOpeningMovePreference(username, years[0], months[0])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out2 <- getOpeningMovePreference(username, years[1], months[1])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out3 <- getOpeningMovePreference(username, years[2], months[2])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out4 <- getOpeningMovePreference(username, years[3], months[3])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out5 <- getOpeningMovePreference(username, years[4], months[4])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out6 <- getOpeningMovePreference(username, years[5], months[5])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out7 <- getOpeningMovePreference(username, years[6], months[6])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out8 <- getOpeningMovePreference(username, years[7], months[7])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out9 <- getOpeningMovePreference(username, years[8], months[8])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out10 <- getOpeningMovePreference(username, years[9], months[9])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out11 <- getOpeningMovePreference(username, years[10], months[10])
+
+	}()
+	go func() {
+		defer wg.Done()
+
+		out12 <- getOpeningMovePreference(username, years[11], months[11])
+
+	}()
+
+	for {
+		select {
+		case msg := <-out1:
+			fmt.Println(msg, "func 1")
+
+		case msg := <-out2:
+			fmt.Println(msg, "func 2")
+
+		case msg := <-out3:
+			fmt.Println(msg, "func 3")
+
+		case msg := <-out4:
+			fmt.Println(msg, "func 4")
+
+		case msg := <-out5:
+			fmt.Println(msg, "func 5")
+
+		case msg := <-out6:
+			fmt.Println(msg, "func 6")
+
+		case msg := <-out7:
+			fmt.Println(msg, "func 7")
+
+		case msg := <-out8:
+			fmt.Println(msg, "func 8")
+
+		case msg := <-out9:
+			fmt.Println(msg, "func 9")
+
+		case msg := <-out10:
+			fmt.Println(msg, "func 10")
+
+		case msg := <-out11:
+			fmt.Println(msg, "func 11")
+
+		case msg := <-out12:
+			fmt.Println(msg, "func 12")
+
+		}
+
+	}
+
 }

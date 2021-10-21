@@ -22,7 +22,9 @@ func main() {
 	switch os.Args[1] {
 	case "-opening":
 		// fmt.Print(getOpeningMovePreference(openingMoveCommand))
-		fmt.Print(getMonths())
+		processOpeningMove("jmelder")
+		// fmt.Print(getMonthlyArchive("DarthBraves", "2021", "9"))
+
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)
