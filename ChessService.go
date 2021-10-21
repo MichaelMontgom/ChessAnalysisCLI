@@ -188,14 +188,17 @@ func getMonths() ([]int, []int) {
 	return months, years
 }
 
-func processOpeningMove(username string) {
+func processOpeningMove(username string) [][][]string {
 
 	months, years := getMonths()
+	var moves [][][]string
 
 	var wg sync.WaitGroup
 
+	// Adding 12 to the wait group for 12 months woth of threads
 	wg.Add(12)
 
+	// Doing research on ways to make this cleaner
 	out1 := make(chan [][]string)
 	out2 := make(chan [][]string)
 	out3 := make(chan [][]string)
@@ -282,46 +285,67 @@ func processOpeningMove(username string) {
 
 	}()
 
+	counter := 0
+
 	for {
+
 		select {
 		case msg := <-out1:
-			fmt.Println(msg, "func 1")
+			// fmt.Println(msg, "func 1")
+			moves = append(moves, msg)
+			counter++
 
 		case msg := <-out2:
-			fmt.Println(msg, "func 2")
-
+			// fmt.Println(msg, "func 2")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out3:
-			fmt.Println(msg, "func 3")
-
+			// fmt.Println(msg, "func 3")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out4:
-			fmt.Println(msg, "func 4")
-
+			// fmt.Println(msg, "func 4")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out5:
-			fmt.Println(msg, "func 5")
-
+			// fmt.Println(msg, "func 5")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out6:
-			fmt.Println(msg, "func 6")
-
+			// fmt.Println(msg, "func 6")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out7:
-			fmt.Println(msg, "func 7")
-
+			// fmt.Println(msg, "func 7")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out8:
-			fmt.Println(msg, "func 8")
-
+			// fmt.Println(msg, "func 8")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out9:
-			fmt.Println(msg, "func 9")
-
+			// fmt.Println(msg, "func 9")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out10:
-			fmt.Println(msg, "func 10")
-
+			// fmt.Println(msg, "func 10")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out11:
-			fmt.Println(msg, "func 11")
-
+			// fmt.Println(msg, "func 11")
+			moves = append(moves, msg)
+			counter++
 		case msg := <-out12:
-			fmt.Println(msg, "func 12")
+			// fmt.Println(msg, "func 12")
+			moves = append(moves, msg)
+			counter++
+		}
 
+		if counter >= 11 {
+			break
 		}
 
 	}
+	return moves
 
 }
